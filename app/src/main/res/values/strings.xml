@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">PI_03_Equipe_01</string>
+    <string name="signUpText">Cadastro</string>
+    <string name="fullNameEditText">Nome Completo</string>
+    <string name="emailEditText">Email</string>
+    <string name="phoneEditText">Telefone</string>
+    <string name="passwordEditText">Senha</string>
+    <string name="signUpButton">Cadastrar</string>
 </resources>
