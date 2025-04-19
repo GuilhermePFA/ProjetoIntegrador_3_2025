@@ -6,4 +6,8 @@
     <string name="phoneEditText">Telefone</string>
     <string name="passwordEditText">Senha</string>
     <string name="signUpButton">Cadastrar</string>
+    <string name="historyText">Histórico</string>
+    <string name="historyId">Id</string>
+    <string name="historyDate">Data</string>
+    <string name="historyStatus">Status</string>
 </resources>
