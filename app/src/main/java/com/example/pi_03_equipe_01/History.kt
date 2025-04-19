@@ -17,13 +17,15 @@ class History : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityHistoryBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        initRecycleView()
     }
     private fun initRecycleView(){
         binding.historyRecyclerView.layoutManager = LinearLayoutManager(this)
         binding.historyRecyclerView.setHasFixedSize(true)
-        binding.historyRecyclerView.adapter = HistoryAdapter(getList())
+        binding.historyRecyclerView.adapter = HistoryAdapter(historyList)
     }
-    private fun getList() = listOf<HistoryItem>(
+    val historyList = listOf(
         HistoryItem("1", "10/04/2025", Status.FINALIZADO),
         HistoryItem("2", "12/04/2025", Status.ANDAMENTO),
         HistoryItem("3", "15/04/2025", Status.NAO_INICIADO)
