@@ -2,7 +2,6 @@ package com.example.pi_03_equipe_01
 
 import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -65,7 +64,7 @@ class SignUp : AppCompatActivity() {
         )
 
         userId?.let {
-            ref.child(userId).setValue(userInfo)
+            ref.child(it).setValue(userInfo)
         }
     }
 }
