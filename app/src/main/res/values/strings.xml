@@ -6,8 +6,17 @@
     <string name="phoneEditText">Telefone</string>
     <string name="passwordEditText">Senha</string>
     <string name="signUpButton">Cadastrar</string>
+    <string name="informationsButton">Voltar</string>
     <string name="historyText">Histórico</string>
     <string name="historyId">Id</string>
     <string name="historyDate">Data</string>
     <string name="historyStatus">Status</string>
+    <string name="informationText">Informações</string>
+    <string name="informationRisk">Risco:</string>
+    <string name="informationDescription">Descrição:</string>
+    <string name="informationId">ID:</string>
+    <string name="informationStatus">Status:</string>
+    <string name="informationDate">Data:</string>
+    <string name="informationLocation">Localização:</string>
+
 </resources>
