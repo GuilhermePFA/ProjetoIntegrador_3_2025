@@ -20,5 +20,6 @@
     <string name="informationLocation">Localização:</string>
     <string name="signUpLogin0">Já possui uma conta?</string>
     <string name="signUpLogin1">Entrar</string>
+    <string name="riskText">Registrar risco</string>
 
 </resources>
