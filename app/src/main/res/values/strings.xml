@@ -18,5 +18,7 @@
     <string name="informationStatus">Status:</string>
     <string name="informationDate">Data:</string>
     <string name="informationLocation">Localização:</string>
+    <string name="signUpLogin0">Já possui uma conta?</string>
+    <string name="signUpLogin1">Entrar</string>
 
 </resources>
