@@ -16,7 +16,7 @@
             android:name=".Risk"
             android:exported="false" />
         <activity
-            android:name=".History"
+            android:name=".SignUp"
             android:exported="false" />
         <activity
             android:name=".Information"
@@ -25,7 +25,7 @@
             android:name=".MainActivity"
             android:exported="false" />
         <activity
-            android:name=".SignUp"
+            android:name=".History"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

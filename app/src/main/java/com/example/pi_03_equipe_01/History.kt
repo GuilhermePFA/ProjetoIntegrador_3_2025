@@ -1,33 +1,64 @@
 package com.example.pi_03_equipe_01
 
-import android.app.Activity
 import android.os.Bundle
-import androidx.activity.enableEdgeToEdge
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.pi_03_equipe_01.databinding.ActivityHistoryBinding
+import com.google.firebase.database.*
 
 class History : AppCompatActivity() {
 
-    private lateinit var binding:ActivityHistoryBinding
+    private val database = FirebaseDatabase.getInstance().getReference("risk")
+    private val historyList = mutableListOf<HistoryItem>()
+    private lateinit var adapter: HistoryAdapter
+    private lateinit var binding: ActivityHistoryBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityHistoryBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        initRecycleView()
+        initRecyclerView()
+        fetchHistoryFromFirebase()
     }
-    private fun initRecycleView(){
+
+    private fun initRecyclerView() {
+        adapter = HistoryAdapter(historyList)
         binding.historyRecyclerView.layoutManager = LinearLayoutManager(this)
         binding.historyRecyclerView.setHasFixedSize(true)
-        binding.historyRecyclerView.adapter = HistoryAdapter(historyList)
+        binding.historyRecyclerView.adapter = adapter
     }
-    val historyList = listOf(
-        HistoryItem("1", "10/04/2025", Status.FINALIZADO),
-        HistoryItem("2", "12/04/2025", Status.ANDAMENTO),
-        HistoryItem("3", "15/04/2025", Status.NAO_INICIADO)
-    )
+
+    private fun fetchHistoryFromFirebase() {
+        database.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                Log.d("FIREBASE", "Snapshot recebido: ${snapshot.childrenCount}")
+                historyList.clear()
+
+                for (itemSnapshot in snapshot.children) {
+                    val id = itemSnapshot.child("riskID").getValue(String::class.java) ?: ""
+                    if (id.isBlank()) continue
+
+                    val date = itemSnapshot.child("created_at").getValue(String::class.java) ?: ""
+                    val statusStr = itemSnapshot.child("status").getValue(String::class.java) ?: "NAO_INICIADO"
+
+                    try {
+                        val status = HistoryItem.Status.valueOf(statusStr.replace(" ", "_").uppercase())
+                        val historyItem = HistoryItem(id, date, status)
+                        historyList.add(historyItem)
+                    } catch (e: Exception) {
+                        Log.e("FIREBASE", "Status inválido ou erro: $statusStr", e)
+                    }
+                }
+
+                Log.d("FIREBASE", "Itens carregados: ${historyList.size}")
+                adapter.notifyDataSetChanged()
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                Log.e("FIREBASE", "Erro de leitura: ${error.message}")
+            }
+        })
+    }
 }
