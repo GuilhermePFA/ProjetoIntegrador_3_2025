@@ -28,15 +28,15 @@ class SignUp : AppCompatActivity() {
             val password = binding.signUpPasswordEditText.text.toString()
 
             if(email.isEmpty() || password.isEmpty() || name.isEmpty()||phone.isEmpty()){
-                val snackbar = Snackbar.make(it, "Preencha todos os campos!", Snackbar.LENGTH_SHORT)
-                snackbar.setBackgroundTint(Color.RED)
-                snackbar.show()
+                val snackbarError = Snackbar.make(it, "Preencha todos os campos!", Snackbar.LENGTH_SHORT)
+                snackbarError.setBackgroundTint(Color.RED)
+                snackbarError.show()
             }else{
                 auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener{ signUp ->
                     if (signUp.isSuccessful){
-                        val snackbar = Snackbar.make(it, "Sucesso ao cadastrar usuário!",Snackbar.LENGTH_SHORT)
-                        snackbar.setBackgroundTint(Color.GREEN)
-                        snackbar.show()
+                        val snackbarSuccess = Snackbar.make(it, "Sucesso ao cadastrar usuário!",Snackbar.LENGTH_SHORT)
+                        snackbarSuccess.setBackgroundTint(Color.GREEN)
+                        snackbarSuccess.show()
                         val userId = auth.currentUser?.uid
                         saveUserInDatabase(userId)
                         binding.signUpFullNameEditText.setText("")

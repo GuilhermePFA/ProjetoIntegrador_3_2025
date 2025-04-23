@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/tableClick"
     android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -23,7 +24,8 @@
         android:text="17/04/2022" />
 
     <LinearLayout
-        android:layout_weight="1.3"
+        android:id="@+id/infoLayout"
+        android:layout_weight="1.4"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"

@@ -1,5 +1,6 @@
 package com.example.pi_03_equipe_01
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
@@ -24,7 +25,11 @@ class History : AppCompatActivity() {
     }
 
     private fun initRecyclerView() {
-        adapter = HistoryAdapter(historyList)
+        adapter = HistoryAdapter(historyList) { historyId ->
+            val intent = Intent(this, Information::class.java)
+            intent.putExtra("HISTORY_ID", historyId)
+            startActivity(intent)
+        }
         binding.historyRecyclerView.layoutManager = LinearLayoutManager(this)
         binding.historyRecyclerView.setHasFixedSize(true)
         binding.historyRecyclerView.adapter = adapter
