@@ -24,13 +24,13 @@ class Risk : AppCompatActivity() {
         binding.riskSent.setOnClickListener { view ->
             // pega o ID do usuário e tbm ve se ta logado
             val currentUser = auth.currentUser
-            val userId = 12345
-//            if (userId == null) {
-//                Snackbar.make(view, "Usuário não autenticado!", Snackbar.LENGTH_SHORT)
-//                    .setBackgroundTint(Color.RED)
-//                    .show()
-//                return@setOnClickListener
-//            }
+            val userId = currentUser?.uid
+            if (userId == null) {
+                Snackbar.make(view, "Usuário não autenticado!", Snackbar.LENGTH_SHORT)
+                    .setBackgroundTint(Color.RED)
+                    .show()
+                return@setOnClickListener
+            }
 
             // forms do codigo
             val anexo = binding.riskAnexEdit.text.toString()
