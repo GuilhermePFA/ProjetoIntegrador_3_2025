@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.pi_03_equipe_01.databinding.ActivityHistoryBinding
 import com.google.firebase.database.*
+import com.google.firebase.database.ValueEventListener
 
 class History : AppCompatActivity() {
 
