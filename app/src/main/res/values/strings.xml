@@ -21,5 +21,9 @@
     <string name="signUpLogin0">Já possui uma conta?</string>
     <string name="signUpLogin1">Entrar</string>
     <string name="riskText">Registrar risco</string>
-
+    <string name="riskType">Tipo de risco</string>
+    <string name="riskLoc">Localização</string>
+    <string name="riskDesc">Descrição</string>
+    <string name="riskAnex">Anexar</string>
+    <string name="riskSent">Enviar</string>
 </resources>
