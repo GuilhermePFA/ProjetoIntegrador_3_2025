@@ -136,13 +136,18 @@
                     android:layout_height="wrap_content"
                     android:text="Status"
                     android:textColor="#B3B3B3" />
-
+                <ImageView
+                    android:id="@+id/statusDotInformations"
+                    android:layout_width="12dp"
+                    android:layout_height="12dp"
+                    android:layout_marginEnd="4dp"
+                    android:src="@drawable/ic_circle_orange" />
                 <TextView
                     android:id="@+id/txtStatusValor"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
-                    android:text="● Finalizado"
+                    android:text=" Finalizado"
                     android:textColor="#00C200" />
             </LinearLayout>
 
@@ -167,16 +172,27 @@
                     android:text="24/02/2025"
                     android:textStyle="bold" />
             </LinearLayout>
-
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="8dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Localização"
+                android:layout_marginRight="6dp"
+                android:textColor="#B3B3B3" />
             <!-- Localização -->
             <TextView
                 android:id="@+id/txtLocalizacao"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
                 android:text="Av. Reitor Benedito José Barreto Fonseca, H15"
                 android:textColor="@color/black"
                 android:textSize="14sp" />
+            </LinearLayout>
+
         </LinearLayout>
 
     </LinearLayout>
