@@ -5,10 +5,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.ImageView
+import android.widget.LinearLayout
 import androidx.recyclerview.widget.RecyclerView
 
 class HistoryAdapter(
-    private val myList: List<HistoryItem>
+    private val myList: List<HistoryItem>,
+    private val onStatusClick: (String) -> Unit
 ) : RecyclerView.Adapter<HistoryAdapter.MyViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
@@ -23,6 +25,10 @@ class HistoryAdapter(
         holder.statusText.text = item.status.texto
         holder.statusDot.setImageResource(item.status.cor)
         holder.infoIcon.setImageResource(item.status.icone)
+
+        holder.infoLayout.setOnClickListener {
+            onStatusClick(item.id)
+        }
     }
 
     override fun getItemCount() = myList.size
@@ -33,5 +39,6 @@ class HistoryAdapter(
         val statusText: TextView = itemView.findViewById(R.id.statusText)
         val statusDot: ImageView = itemView.findViewById(R.id.statusDot)
         val infoIcon: ImageView = itemView.findViewById(R.id.infoIcon)
+        val infoLayout: LinearLayout = itemView.findViewById((R.id.infoLayout))
     }
 }
