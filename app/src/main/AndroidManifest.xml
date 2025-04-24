@@ -13,6 +13,9 @@
         android:theme="@style/Theme.PI_03_Equipe_01"
         tools:targetApi="31">
         <activity
+            android:name=".History"
+            android:exported="false" />
+        <activity
             android:name=".Risk"
             android:exported="false" />
         <activity
@@ -25,7 +28,7 @@
             android:name=".MainActivity"
             android:exported="false" />
         <activity
-            android:name=".History"
+            android:name=".Login"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
