@@ -1,53 +1,80 @@
-<?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal"
+<androidx.drawerlayout.widget.DrawerLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/historyTable"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="@drawable/row_background"
-    android:padding="12dp"
-    android:layout_marginBottom="4dp">
+    android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/idText"
-        android:layout_weight="1"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:textStyle="bold"
-        android:text="0003" />
-
-    <TextView
-        android:id="@+id/dateText"
-        android:layout_weight="1"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="17/04/2022" />
-
+    <!-- Tela Principal -->
     <LinearLayout
-        android:layout_weight="1.3"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:gravity="center_vertical"
-        android:orientation="horizontal">
+        android:id="@+id/main2"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        tools:context=".History_table">
 
-        <ImageView
-            android:id="@+id/statusDot"
-            android:layout_width="12dp"
-            android:layout_height="12dp"
-            android:layout_marginEnd="4dp"
-            android:src="@drawable/ic_circle_orange" />
-
-        <TextView
-            android:id="@+id/statusText"
+        <!-- Botão para abrir o menu lateral -->
+        <Button
+            android:id="@+id/menu_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Em andamento"
-            android:textSize="14sp"
-            android:layout_marginEnd="4dp" />
+            android:text="Menu"
+            android:backgroundTint="@color/green"
+            android:layout_margin="10dp" />
 
-        <ImageView
-            android:id="@+id/infoIcon"
-            android:layout_width="18dp"
-            android:layout_height="18dp"
-            android:src="@drawable/ic_info_orange"/>
+        <!-- Conteúdo Principal -->
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/row_background"
+            android:padding="12dp"
+            android:layout_marginBottom="4dp">
+
+            <TextView
+                android:id="@+id/idText"
+                android:layout_weight="1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:text="0003" />
+
+            <TextView
+                android:id="@+id/dateText"
+                android:layout_weight="1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="17/04/2022" />
+
+            <ImageView
+                android:id="@+id/statusDot"
+                android:layout_width="12dp"
+                android:layout_height="20dp"
+                android:layout_marginEnd="5dp"
+                android:src="@drawable/ic_circle_orange" />
+
+            <TextView
+                android:id="@+id/statusText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Em andamento"
+                android:textSize="14sp"
+                android:layout_marginEnd="4dp" />
+
+            <ImageView
+                android:id="@+id/infoIcon"
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:src="@drawable/ic_info_orange" />
+        </LinearLayout>
     </LinearLayout>
-</LinearLayout>
+
+    <!-- Menu Lateral -->
+    <com.google.android.material.navigation.NavigationView
+        android:id="@+id/nav_view"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        app:menu="@menu/menu_navigation" />
+</androidx.drawerlayout.widget.DrawerLayout>
