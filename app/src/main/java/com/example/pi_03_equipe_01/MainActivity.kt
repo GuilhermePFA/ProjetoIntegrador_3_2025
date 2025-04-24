@@ -2,6 +2,8 @@ package com.example.pi_03_equipe_01
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
@@ -22,7 +24,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         // Inicialize o DrawerLayout e NavigationView
-        drawerLayout = findViewById(R.id.main)
+        drawerLayout = findViewById(R.id.mainact)
         val navigationView: NavigationView = findViewById(R.id.nav_view)
 
         // Configure o botão para abrir o menu lateral
@@ -46,11 +48,28 @@ class MainActivity : AppCompatActivity() {
                 }
                 R.id.nav_sair -> {
                     // Encerra a atividade atual
-                    finish()
+                    finishAffinity()
                 }
             }
             drawerLayout.closeDrawers() // Fecha o menu após seleção
             true
+        }
+    }
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        // Infla o menu, isso adiciona itens à action bar se estiver presente.
+        menuInflater.inflate(R.menu.menu_navigation, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.nav_history -> {
+                // Cria uma Intent para iniciar a History Activity
+                val intent = Intent(this, History::class.java)
+                startActivity(intent)
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
         }
     }
 }

@@ -17,11 +17,12 @@ class History : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_history)
         binding = ActivityHistoryBinding.inflate(layoutInflater)
-        setContentView(binding.root)
 
         // Inicialize o DrawerLayout e NavigationView
-        drawerLayout = findViewById(R.id.hist)
+        drawerLayout = findViewById(R.id.hist) // Seu ID do DrawerLayout
+
         val navigationView: NavigationView = findViewById(R.id.nav_view)
 
         // Configure o botão para abrir o menu lateral
@@ -38,17 +39,20 @@ class History : AppCompatActivity() {
                     startActivity(intent)
                 }
                 R.id.nav_history -> {
-                    // Fechar o menu sem recarregar, já estamos na atividade "History"
-                    drawerLayout.closeDrawer(GravityCompat.START)
+                    // Mesmo que já esteja na activity History, iniciamos uma nova instância.
+                    val intent = Intent(this, History::class.java)
+                    startActivity(intent)
+                    finish()
                 }
                 R.id.nav_signup -> {
                     val intent = Intent(this, SignUp::class.java)
                     startActivity(intent)
                 }
                 R.id.nav_sair -> {
-                    finish() // Encerra a atividade atual
+                    finishAffinity() // Encerra a activity
                 }
             }
+            drawerLayout.closeDrawer(GravityCompat.START)
             true
         }
 
