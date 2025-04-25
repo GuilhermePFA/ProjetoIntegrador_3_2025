@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
@@ -30,7 +31,7 @@ class History : AppCompatActivity() {
 
         val navigationView: NavigationView = findViewById(R.id.nav_view)
 
-        val menuButton: Button = findViewById(R.id.menu_button)
+        val menuButton: TextView = findViewById(R.id.menu_button)
         menuButton.setOnClickListener {
             drawerLayout.openDrawer(GravityCompat.START)
         }

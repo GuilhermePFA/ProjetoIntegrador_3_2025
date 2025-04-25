@@ -26,7 +26,7 @@ class HistoryAdapter(
         holder.statusDot.setImageResource(item.status.cor)
         holder.infoIcon.setImageResource(item.status.icone)
 
-        holder.infoLayout.setOnClickListener {
+        holder.tableLayout.setOnClickListener {
             onStatusClick(item.id)
         }
     }
@@ -39,6 +39,6 @@ class HistoryAdapter(
         val statusText: TextView = itemView.findViewById(R.id.statusText)
         val statusDot: ImageView = itemView.findViewById(R.id.statusDot)
         val infoIcon: ImageView = itemView.findViewById(R.id.infoIcon)
-        val infoLayout: LinearLayout = itemView.findViewById((R.id.infoLayout))
+        val tableLayout: LinearLayout = itemView.findViewById((R.id.tableClick))
     }
 }
