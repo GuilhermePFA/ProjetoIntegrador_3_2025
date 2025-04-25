@@ -8,7 +8,7 @@
     tools:context=".Risk">
 
     <TextView
-        android:id="@+id/riskTextView"
+        android:id="@+id/riskTextViewEdit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="600dp"
@@ -20,5 +20,82 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/riskTypeEditText"
+        android:layout_width="350dp"
+        android:layout_height="60dp"
+        android:background="@drawable/edit_text_shape"
+        android:hint="@string/riskType"
+        android:inputType="text"
+        android:padding="16dp"
+        android:layout_marginTop="32dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/riskTextViewEdit" />
+
+
+    <EditText
+        android:id="@+id/riskLocEditText"
+        android:layout_width="350dp"
+        android:layout_height="60dp"
+        android:background="@drawable/edit_text_shape"
+        android:hint="@string/riskLoc"
+        android:inputType="text"
+        android:padding="16dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/riskTypeEditText" />
+
+    <EditText
+        android:id="@+id/riskDescEditText"
+        android:layout_width="350dp"
+        android:layout_height="200dp"
+        android:background="@drawable/edit_text_shape"
+        android:hint="@string/riskDesc"
+        android:inputType="text"
+        android:padding="16dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/riskLocEditText" />
+
+    <EditText
+        android:id="@+id/riskAnexEdit"
+        android:layout_width="350dp"
+        android:layout_height="60dp"
+        android:background="@drawable/edit_text_shape"
+        android:hint="@string/riskAnex"
+        android:inputType="text"
+        android:padding="16dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/riskDescEditText" />
+
+    <Button
+        android:id="@+id/riskSent"
+        android:layout_width="350dp"
+        android:layout_height="60dp"
+        android:text="@string/riskSent"
+        android:textSize="30sp"
+        android:textColor="#FFFFFF"
+        android:backgroundTint="@color/green"
+        app:cornerRadius="12dp"
+        app:icon="@drawable/ic_next_buttons_20"
+        app:iconSize="40dp"
+        app:iconGravity="textEnd"
+        app:iconPadding="0dp"
+        app:layout_constraintTop_toBottomOf="@+id/riskAnexEdit"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="75dp" />
+
+
+
+
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
