@@ -23,8 +23,8 @@ class Risk : AppCompatActivity() {
 
         binding.riskSent.setOnClickListener { view ->
             // pega o ID do usuário e tbm ve se ta logado
-            val currentUser = auth.currentUser
-            val userId = currentUser?.uid
+            val currentUser = intent.getStringExtra("USER_ID") ?: return@setOnClickListener
+            val userId = currentUser
             if (userId == null) {
                 Snackbar.make(view, "Usuário não autenticado!", Snackbar.LENGTH_SHORT)
                     .setBackgroundTint(Color.RED)
@@ -79,7 +79,7 @@ class Risk : AppCompatActivity() {
         }
     }
 
-    // Função para gerar o id do risco
+    // Função para gerar um String numérico de exatamente 5 dígitos
     private fun generateFiveDigitId(): String {
         val number = Random.nextInt(10000, 100000) // [10000, 99999]
         return number.toString()
