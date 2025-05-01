@@ -23,8 +23,10 @@ class Risk : AppCompatActivity() {
 
         binding.riskSent.setOnClickListener { view ->
             // pega o ID do usuário e tbm ve se ta logado
-            val currentUser = intent.getStringExtra("USER_ID") ?: return@setOnClickListener
-            val userId = currentUser
+           //val currentUser = intent.getStringExtra("USER_ID") ?: return@setOnClickListener
+            //val userId = currentUser
+            val currentUser = FirebaseAuth.getInstance().currentUser
+            val userId = currentUser?.uid
             if (userId == null) {
                 Snackbar.make(view, "Usuário não autenticado!", Snackbar.LENGTH_SHORT)
                     .setBackgroundTint(Color.RED)
@@ -62,7 +64,7 @@ class Risk : AppCompatActivity() {
                 "location" to localizacao,
                 "title" to tipo,
                 "description" to descricao,
-                "status" to "NAO INICIADO"
+                "status" to "NAO INICIADO",
             )
 
             db.child(riskId).setValue(riskInfo)

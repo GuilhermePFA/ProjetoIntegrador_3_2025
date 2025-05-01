@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.pi_03_equipe_01.databinding.ActivityHistoryBinding
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.database.*
+import com.google.firebase.auth.FirebaseAuth
 
 class History : AppCompatActivity() {
 
@@ -57,7 +58,7 @@ class History : AppCompatActivity() {
         }
 
         initRecyclerView()
-        fetchHistoryFromFirebase()
+        fetchHistoryById()
     }
 
     private fun initRecyclerView() {
@@ -102,4 +103,46 @@ class History : AppCompatActivity() {
             }
         })
     }
+
+
+private fun fetchHistoryById(){
+    database.addValueEventListener(object : ValueEventListener {
+        override fun onDataChange(snapshot: DataSnapshot) {
+            Log.d("FIREBASE", "Snapshot recebido: ${snapshot.childrenCount}")
+            historyList.clear()
+
+            val currentUser = FirebaseAuth.getInstance().currentUser
+            val userId = currentUser?.uid
+
+
+
+
+            for (itemSnapshot in snapshot.children) {
+                val id = itemSnapshot.child("riskID").getValue(String::class.java) ?: ""
+                if (id.isBlank()) continue
+                val iduser = itemSnapshot.child("created_by_userID").getValue(String::class.java) ?: ""
+                if (iduser == userId ){
+                    val date = itemSnapshot.child("created_at").getValue(String::class.java) ?: ""
+                    val statusStr = itemSnapshot.child("status").getValue(String::class.java) ?: "NAO_INICIADO"
+
+                    try {
+                        val status = HistoryItem.Status.valueOf(statusStr.replace(" ", "_").uppercase())
+                        val historyItem = HistoryItem(id, date, status)
+                        historyList.add(historyItem)
+                    } catch (e: Exception) {
+                        Log.e("FIREBASE", "Status inválido ou erro: $statusStr", e)
+                    }
+                }
+
+            }
+
+            Log.d("FIREBASE", "Itens carregados: ${historyList.size}")
+            adapter.notifyDataSetChanged()
+        }
+
+        override fun onCancelled(error: DatabaseError) {
+            Log.e("FIREBASE", "Erro de leitura: ${error.message}")
+        }
+    })
+}
 }
