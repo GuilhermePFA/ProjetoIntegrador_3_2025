@@ -27,10 +27,8 @@
     <string name="riskAnex">Anexar</string>
     <string name="riskSent">Enviar</string>
     <string name="loginButton">Entrar</string>
-    <string name="signUpRedirectText">Ainda não tem uma conta?</string>
     <string name="login">Login</string>
-    <string name="digite_seu_e_mail">Digite seu e-mail</string>
     <string name="entrar">Entrar</string>
-    <string name="ainda_n_o_tem_uma_conta">Ainda não tem uma conta?</string>
-    <string name="cadastre_se_aqui">Cadastre-se aqui</string>
+    <string name="signInToSignUp0">Ainda não tem uma conta?</string>
+    <string name="signInToSignUp1">Cadastre-se</string>
 </resources>
