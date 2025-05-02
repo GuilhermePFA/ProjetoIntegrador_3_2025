@@ -72,37 +72,6 @@ class History : AppCompatActivity() {
         binding.historyRecyclerView.adapter = adapter
     }
 
-    private fun fetchHistoryFromFirebase() {
-        database.addValueEventListener(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                Log.d("FIREBASE", "Snapshot recebido: ${snapshot.childrenCount}")
-                historyList.clear()
-
-                for (itemSnapshot in snapshot.children) {
-                    val id = itemSnapshot.child("riskID").getValue(String::class.java) ?: ""
-                    if (id.isBlank()) continue
-
-                    val date = itemSnapshot.child("created_at").getValue(String::class.java) ?: ""
-                    val statusStr = itemSnapshot.child("status").getValue(String::class.java) ?: "NAO_INICIADO"
-
-                    try {
-                        val status = HistoryItem.Status.valueOf(statusStr.replace(" ", "_").uppercase())
-                        val historyItem = HistoryItem(id, date, status)
-                        historyList.add(historyItem)
-                    } catch (e: Exception) {
-                        Log.e("FIREBASE", "Status inválido ou erro: $statusStr", e)
-                    }
-                }
-
-                Log.d("FIREBASE", "Itens carregados: ${historyList.size}")
-                adapter.notifyDataSetChanged()
-            }
-
-            override fun onCancelled(error: DatabaseError) {
-                Log.e("FIREBASE", "Erro de leitura: ${error.message}")
-            }
-        })
-    }
 
 
 private fun fetchHistoryById(){
