@@ -41,9 +41,9 @@ class MainActivity : AppCompatActivity() {
                     val intent = Intent(this, History::class.java)
                     startActivity(intent)
                 }
-                R.id.nav_signup -> {
+                R.id.nav_risk -> {
                     // Ação para abrir a tela "SignUp"
-                    val intent = Intent(this, SignUp::class.java)
+                    val intent = Intent(this, Risk::class.java)
                     startActivity(intent)
                 }
                 R.id.nav_sair -> {

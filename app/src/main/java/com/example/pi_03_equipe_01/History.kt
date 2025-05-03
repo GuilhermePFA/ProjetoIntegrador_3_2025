@@ -46,8 +46,8 @@ class History : AppCompatActivity() {
                     startActivity(Intent(this, History::class.java))
                     finish()
                 }
-                R.id.nav_signup -> {
-                    startActivity(Intent(this, SignUp::class.java))
+                R.id.nav_risk -> {
+                    startActivity(Intent(this, Risk::class.java))
                 }
                 R.id.nav_sair -> {
                     finishAffinity()
