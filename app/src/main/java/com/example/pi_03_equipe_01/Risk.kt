@@ -66,7 +66,11 @@ class Risk : AppCompatActivity() {
             tvLatitude = findViewById(R.id.riskLocEditText)
             tvLongitude = findViewById(R.id.riskLocEditText)
 
-
+            binding.ModalLink.setOnClickListener
+            {
+                val intent = Intent(this, SignUp::class.java)
+                startActivity(intent)
+            }
 
 
             // forms do codigo
@@ -249,6 +253,7 @@ class Risk : AppCompatActivity() {
             }
         }
     }
+
 
     companion object{
         private const val PERMISSION_REQUEST_ACESS_LOCATION=100
