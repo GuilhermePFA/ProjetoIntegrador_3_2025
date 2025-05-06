@@ -87,12 +87,12 @@ private fun fetchHistoryById(){
 
 
             for (itemSnapshot in snapshot.children) {
-                val id = itemSnapshot.child("riskID").getValue(String::class.java) ?: ""
+                val id = itemSnapshot.child("riskID").value?.toString() ?: ""
                 if (id.isBlank()) continue
-                val iduser = itemSnapshot.child("created_by_userID").getValue(String::class.java) ?: ""
+                val iduser = itemSnapshot.child("created_by_userID").value?.toString() ?: ""
                 if (iduser == userId ){
-                    val date = itemSnapshot.child("created_at").getValue(String::class.java) ?: ""
-                    val statusStr = itemSnapshot.child("status").getValue(String::class.java) ?: "NAO_INICIADO"
+                    val date = itemSnapshot.child("created_at").value?.toString() ?: ""
+                    val statusStr = itemSnapshot.child("status").value?.toString() ?: "NAO_INICIADO"
 
                     try {
                         val status = HistoryItem.Status.valueOf(statusStr.replace(" ", "_").uppercase())

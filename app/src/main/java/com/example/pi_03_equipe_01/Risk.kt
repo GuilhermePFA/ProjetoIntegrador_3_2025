@@ -59,8 +59,7 @@ class Risk : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            tvLatitude = findViewById(R.id.riskLocEditText)
-            tvLongitude = findViewById(R.id.riskLocEditText)
+
 
 
 
