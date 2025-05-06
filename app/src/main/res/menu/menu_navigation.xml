@@ -10,9 +10,9 @@
         android:icon="@drawable/ic_history"/>
 
     <item
-        android:id="@+id/nav_risk"
-        android:title="risk"
-        android:icon="@drawable/ic_risk"/>
+        android:id="@+id/nav_signup"
+        android:title="SignUp"
+        android:icon="@drawable/ic_signup"/>
 
     <item
         android:id="@+id/nav_sair"

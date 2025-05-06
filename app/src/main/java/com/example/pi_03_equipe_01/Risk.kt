@@ -14,13 +14,10 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
-import androidx.core.view.GravityCompat
-import androidx.drawerlayout.widget.DrawerLayout
 import com.example.pi_03_equipe_01.databinding.ActivityRiskBinding
 import com.google.android.gms.common.api.Api.Client
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
-import com.google.android.material.navigation.NavigationView
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
@@ -31,7 +28,6 @@ import kotlin.random.Random
 
 
 class Risk : AppCompatActivity() {
-    private lateinit var drawerLayout: DrawerLayout
     private val auth = FirebaseAuth.getInstance()
     private lateinit var binding: ActivityRiskBinding
     lateinit var fusedLocationProviderClient:FusedLocationProviderClient
@@ -114,34 +110,6 @@ class Risk : AppCompatActivity() {
                         .setBackgroundTint(Color.RED)
                         .show()
                 }
-        }
-        drawerLayout = findViewById(R.id.nav_risk)
-
-        val navigationView: NavigationView = findViewById(R.id.nav_view)
-
-        val menuButton: TextView = findViewById(R.id.menu_button)
-        menuButton.setOnClickListener {
-            drawerLayout.openDrawer(GravityCompat.START)
-        }
-
-        navigationView.setNavigationItemSelectedListener { menuItem ->
-            when (menuItem.itemId) {
-                R.id.nav_home -> {
-                    startActivity(Intent(this, MainActivity::class.java))
-                }
-                R.id.nav_history -> {
-                    startActivity(Intent(this, History::class.java))
-                    finish()
-                }
-                R.id.nav_risk -> {
-                    startActivity(Intent(this, Risk::class.java))
-                }
-                R.id.nav_sair -> {
-                    finishAffinity()
-                }
-            }
-            drawerLayout.closeDrawer(GravityCompat.START)
-            true
         }
     }
 
