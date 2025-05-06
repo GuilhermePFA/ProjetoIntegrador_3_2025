@@ -81,6 +81,20 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/riskDescEditText" />
 
+        <ImageView
+            android:id="@+id/riskAnexEditIcon"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="275dp"
+            android:layout_marginTop="18dp"
+            android:background="@drawable/edit_text_shape"
+            android:contentDescription="@string/riskAnex"
+            android:padding="16dp"
+            android:src="@drawable/ic_camera"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/riskDescEditText" />
+
         <Button
             android:id="@+id/riskSent"
             android:layout_width="350dp"
