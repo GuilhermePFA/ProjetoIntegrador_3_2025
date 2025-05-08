@@ -6,11 +6,11 @@ import android.os.Bundle
 import android.text.InputType
 import android.util.Log
 import android.view.MotionEvent
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.pi_03_equipe_01.databinding.ActivityLoginBinding
 import com.google.android.material.snackbar.Snackbar
-import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.FirebaseNetworkException
+import com.google.firebase.auth.*
 
 class Login : AppCompatActivity() {
 
@@ -30,19 +30,16 @@ class Login : AppCompatActivity() {
             val password = binding.loginPasswordEditText.text.toString().trim()
 
             if (email.isEmpty() || password.isEmpty()) {
-                val snackbarError = Snackbar.make(it, "Preencha todos os campos!", Snackbar.LENGTH_SHORT)
-                snackbarError.setBackgroundTint(Color.RED)
-                snackbarError.show()
-                return@setOnClickListener
+                showSnackbar("Preencha todos os campos!", Color.RED)
+            } else {
+                realizarLogin(email, password)
             }
-
-            realizarLogin(email, password)
         }
 
         binding.signInLink.setOnClickListener {
-            val intent = Intent(this, SignUp::class.java)
-            startActivity(intent)
+            startActivity(Intent(this, SignUp::class.java))
         }
+
         @Suppress("ClickableViewAccessibility")
         binding.loginPasswordEditText.setOnTouchListener { v, event ->
             if (event.action == MotionEvent.ACTION_UP) {
@@ -52,7 +49,7 @@ class Login : AppCompatActivity() {
                             binding.loginPasswordEditText.paddingEnd -
                             drawableEnd.intrinsicWidth
                     if (event.rawX >= touchAreaStart) {
-                        v.performClick() // ✅ Notifica que houve um click
+                        v.performClick()
                         isPasswordVisible = !isPasswordVisible
                         togglePasswordVisibility(isPasswordVisible)
                         return@setOnTouchListener true
@@ -67,30 +64,50 @@ class Login : AppCompatActivity() {
         auth.signInWithEmailAndPassword(email, password)
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
-                    Log.d("LOGIN", "Usuário logado com sucesso: ${auth.currentUser?.uid}")
+                    val userId = auth.currentUser?.uid
+                    Log.d("LOGIN", "Usuário logado com sucesso: $userId")
                     val intent = Intent(this, Risk::class.java)
-                    intent.putExtra("USER_ID", auth.currentUser?.uid)
+                    intent.putExtra("USER_ID", userId)
                     startActivity(intent)
                     finish()
                 } else {
-                    Log.e("LOGIN", "Erro no login", task.exception)
-                    Toast.makeText(
-                        this,
-                        "Erro ao fazer login: ${task.exception?.message}",
-                        Toast.LENGTH_LONG
-                    ).show()
+                    val exception = task.exception
+                    val message = when (exception) {
+                        is FirebaseAuthInvalidUserException ->
+                            "Conta não encontrada. Verifique o e-mail."
+                        is FirebaseAuthInvalidCredentialsException ->
+                            "E-mail ou senha incorretos."
+                        is FirebaseNetworkException ->
+                            "Sem conexão com a internet."
+                        else ->
+                            // Caso queira tratar TOO_MANY_ATTEMPTS:
+                            if (exception?.message?.contains("TOO_MANY_ATTEMPTS_TRY_LATER") == true)
+                                "Muitas tentativas. Tente novamente mais tarde."
+                            else
+                                "Erro ao fazer login: ${exception?.localizedMessage ?: "Erro desconhecido"}"
+                    }
+                    showSnackbar(message, Color.RED)
+                    Log.e("LOGIN", message, exception)
                 }
             }
     }
+
     private fun togglePasswordVisibility(visible: Boolean) {
-        if (visible) {
-            binding.loginPasswordEditText.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
-            binding.loginPasswordEditText.setCompoundDrawablesRelativeWithIntrinsicBounds(0, 0, R.drawable.password_eye_off_24, 0)
+        val inputType = if (visible) {
+            InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
         } else {
-            binding.loginPasswordEditText.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
-            binding.loginPasswordEditText.setCompoundDrawablesRelativeWithIntrinsicBounds(0, 0, R.drawable.password_eye_24, 0)
+            InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
         }
-        // Move cursor para o fim
-        binding.loginPasswordEditText.setSelection(binding.loginPasswordEditText.text.length)
+        binding.loginPasswordEditText.inputType = inputType
+
+        val icon = if (visible) R.drawable.password_eye_off_24 else R.drawable.password_eye_24
+        binding.loginPasswordEditText.setCompoundDrawablesRelativeWithIntrinsicBounds(0, 0, icon, 0)
+        binding.loginPasswordEditText.setSelection(binding.loginPasswordEditText.text?.length ?: 0)
+    }
+
+    private fun showSnackbar(message: String, color: Int) {
+        Snackbar.make(binding.root, message, Snackbar.LENGTH_SHORT)
+            .setBackgroundTint(color)
+            .show()
     }
 }
