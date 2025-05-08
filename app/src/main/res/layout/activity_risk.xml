@@ -68,25 +68,11 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/riskLocEditText" />
 
-        <EditText
-            android:id="@+id/riskAnexEdit"
+        <ImageView
+            android:id="@+id/riskAnexEditIcon"
             android:layout_width="350dp"
             android:layout_height="60dp"
             android:layout_marginTop="16dp"
-            android:background="@drawable/edit_text_shape"
-            android:hint="@string/riskAnex"
-            android:inputType="text"
-            android:padding="16dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/riskDescEditText" />
-
-        <ImageView
-            android:id="@+id/riskAnexEditIcon"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_marginStart="275dp"
-            android:layout_marginTop="24dp"
             android:background="@drawable/edit_text_shape"
             android:contentDescription="@string/riskAnex"
             android:padding="16dp"
@@ -111,7 +97,7 @@
             app:iconSize="40dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/riskAnexEdit" />
+            app:layout_constraintTop_toBottomOf="@+id/riskAnexEditIcon" />
 
         <ImageButton
             android:id="@+id/menu_button"
