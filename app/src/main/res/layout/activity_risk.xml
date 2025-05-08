@@ -86,7 +86,7 @@
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_marginStart="275dp"
-            android:layout_marginTop="18dp"
+            android:layout_marginTop="24dp"
             android:background="@drawable/edit_text_shape"
             android:contentDescription="@string/riskAnex"
             android:padding="16dp"
@@ -113,15 +113,18 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/riskAnexEdit" />
 
-        <TextView
-            android:id="@+id/Modallinkk"
+        <ImageButton
+            android:id="@+id/menu_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:drawableRight="@drawable/ic_more"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
             android:layout_margin="12dp"
-            android:backgroundTint="@color/green" />
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/ic_more"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="@color/green" />
+
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <!-- Menu Lateral -->
