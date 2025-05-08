@@ -44,6 +44,9 @@ class Information : AppCompatActivity() {
                     val description = snapshot.child("description").getValue(String::class.java) ?: ""
                     val name = snapshot.child("title").getValue(String::class.java) ?: ""
                     var date = snapshot.child("created_at").getValue(String::class.java) ?: ""
+                    val lat = snapshot.child("latitude").getValue(Double::class.java) ?: 0.0
+                    val long = snapshot.child("longitude").getValue(Double::class.java) ?: 0.0
+                      var localizacao = "Lat: $lat, Long: $long"
                     date = date.format(99/99/99)
                     var status = HistoryItem.Status.NAO_INICIADO.texto
                     var statusIcon = HistoryItem.Status.NAO_INICIADO.icone
@@ -75,6 +78,7 @@ class Information : AppCompatActivity() {
                         binding.txtDataValor.text = date
                         binding.txtStatusValor.text = status
                         //binding.statusDotInformations.integer = statusIcon
+                        binding.txtLocalizacao.text = localizacao
                         binding.descriptionTextView.text = descriptionView
                     } catch (e: Exception) {
                         Log.e("CONSULTA", "Erro ao interpretar o status", e)
