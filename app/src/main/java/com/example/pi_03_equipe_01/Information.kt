@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.util.Log
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.pi_03_equipe_01.databinding.ActivityInformationsBinding
@@ -49,17 +50,19 @@ class Information : AppCompatActivity() {
                       var localizacao = "Lat: $lat, Long: $long"
                     date = date.format(99/99/99)
                     var status = HistoryItem.Status.NAO_INICIADO.texto
-                    var statusIcon = HistoryItem.Status.NAO_INICIADO.icone
-
+                    var statusimg = ContextCompat.getDrawable(this@Information, R.drawable.ic_circle_gray)
                     val statusStr =
                         snapshot.child("status").getValue(String::class.java) ?: "NAO_INICIADO"
                     if (statusStr=="Finalizado"){
                         val statusName = "Finalizado"
                          status = HistoryItem.Status.FINALIZADO.texto
+                        statusimg = ContextCompat.getDrawable(this@Information, R.drawable.ic_circle_green)
+
                     }
                     else if (statusStr == "Em andamento"){
                         val statusName = "Em andamento"
                         status = HistoryItem.Status.EM_ANDAMENTO.texto
+                        statusimg = ContextCompat.getDrawable(this@Information, R.drawable.ic_circle_orange)
 
                     }
                     else {
@@ -79,6 +82,7 @@ class Information : AppCompatActivity() {
                         binding.txtStatusValor.text = status
                         //binding.statusDotInformations.integer = statusIcon
                         binding.txtLocalizacao.text = localizacao
+                        binding.statusDotInformations.setImageDrawable(statusimg)
                         binding.descriptionTextView.text = descriptionView
                     } catch (e: Exception) {
                         Log.e("CONSULTA", "Erro ao interpretar o status", e)
