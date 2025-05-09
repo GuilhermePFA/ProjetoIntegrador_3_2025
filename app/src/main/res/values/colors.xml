@@ -8,4 +8,5 @@
     <color name="statusGray">#9E9E9E</color>
     <color name="gray">#EFEFEF</color>
     <color name="gray_2">#626262</color>
+    <color name="red">#F44336</color>
 </resources>

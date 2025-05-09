@@ -1,224 +1,206 @@
 package com.example.pi_03_equipe_01
 
+import android.Manifest
 import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
 import android.graphics.Color
 import android.location.Location
 import android.location.LocationManager
 import android.os.Bundle
 import android.provider.Settings
-import android.util.Log
-import android.widget.TextView
-import android.widget.Toast
+import android.text.InputType
+import android.util.Base64
+import android.view.inputmethod.InputMethodManager
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
+import androidx.core.view.GravityCompat
 import com.example.pi_03_equipe_01.databinding.ActivityRiskBinding
-import com.google.android.gms.common.api.Api.Client
-import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
+import java.io.ByteArrayOutputStream
 import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
-import kotlin.random.Random
-
+import java.util.*
 
 class Risk : AppCompatActivity() {
     private val auth = FirebaseAuth.getInstance()
+
     private lateinit var binding: ActivityRiskBinding
-    lateinit var fusedLocationProviderClient:FusedLocationProviderClient
-    lateinit var tvLatitude: TextView
-    lateinit var tvLongitude: TextView
+    private var imageBase64Firebase: String? = null
     private var userLatitude: Double? = null
     private var userLongitude: Double? = null
+
+    private val PERM_LOCATION = 100
+    private val PERM_CAMERA = 200
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityRiskBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        fusedLocationProviderClient=LocationServices.getFusedLocationProviderClient(this)
 
-        binding.riskLocEditText.setOnClickListener {
-            getLocation()
+        // Menu lateral
+        binding.menuButton.setOnClickListener {
+            hideKeyboard()
+            binding.main.openDrawer(GravityCompat.START)
+        }
+
+        binding.navView.setNavigationItemSelectedListener {
+            when (it.itemId) {
+                R.id.nav_history -> startActivity(Intent(this, History::class.java)).also { finish() }
+                R.id.nav_sair -> finishAffinity()
+            }
+            binding.main.closeDrawer(GravityCompat.START)
+            true
+        }
+
+        val fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+
+        binding.riskLocEditText.apply {
+            inputType = InputType.TYPE_NULL
+            setOnClickListener { requestLocation(fusedLocationClient) }
+        }
+
+        binding.riskAnexEditIcon.setOnClickListener {
+            hideKeyboard()
+            AlertDialog.Builder(this)
+                .setTitle("Imagem")
+                .setMessage("Deseja tirar uma foto?")
+                .setPositiveButton("Sim") { _, _ -> checkCameraPermission() }
+                .setNegativeButton("Cancelar", null)
+                .show()
         }
 
         binding.riskSent.setOnClickListener { view ->
-            // pega o ID do usuário e tbm ve se ta logado
-            //val currentUser = intent.getStringExtra("USER_ID") ?: return@setOnClickListener
-            //val userId = currentUser
-            val currentUser = FirebaseAuth.getInstance().currentUser
-            val userId = currentUser?.uid
-            if (userId == null) {
-                Snackbar.make(view, "Usuário não autenticado!", Snackbar.LENGTH_SHORT)
-                    .setBackgroundTint(Color.RED)
-                    .show()
+            val uid = FirebaseAuth.getInstance().currentUser?.uid
+            if (uid == null) {
+                showSnackbar(view, "Usuário não autenticado!", false)
                 return@setOnClickListener
             }
 
-
-
-
-
-
-            // forms do codigo
-            val anexo = binding.riskAnexEdit.text.toString()
             val localizacao = binding.riskLocEditText.text.toString()
+            val pic = imageBase64Firebase ?: ""
+            val loc = binding.riskLocEditText.text.toString()
             val tipo = binding.riskTypeEditText.text.toString()
-            val descricao = binding.riskDescEditText.text.toString()
+            val desc = binding.riskDescEditText.text.toString()
 
-            if (anexo.isEmpty() || localizacao.isEmpty() || tipo.isEmpty() || descricao.isEmpty()) {
-                Snackbar.make(view, "Preencha todos os campos!", Snackbar.LENGTH_SHORT)
-                    .setBackgroundTint(Color.RED)
-                    .show()
+            if (pic.isBlank() || loc.isBlank() || tipo.isBlank() || desc.isBlank()) {
+                showSnackbar(view, "Preencha todos os campos!", false)
                 return@setOnClickListener
             }
 
-            //faz a data funcionar (AMEM)
-            val sdf = SimpleDateFormat("dd/MM/yyyy", Locale("pt", "BR"))
-            val now = sdf.format(Date())
+            val dateNow = SimpleDateFormat("dd/MM/yyyy", Locale("pt", "BR")).format(Date())
+            val riskId = (10000..99999).random().toString()
 
-
-            val riskId = generateFiveDigitId()
-
-            // map do banco
-            val db = FirebaseDatabase.getInstance().getReference("risk")
-            val riskInfo = mapOf(
+            val data = mapOf(
                 "riskID" to riskId,
-                "created_at" to now,
-                "created_by_userID" to userId,
-                "picture" to anexo,
+                "created_at" to dateNow,
+                "created_by_userID" to uid,
+                "picture" to pic,
                 "latitude" to userLatitude,
                 "longitude" to userLongitude,
                 "title" to tipo,
-                "description" to descricao,
-                "status" to "NAO INICIADO",
+                "description" to desc,
+                "status" to "NAO_INICIADO"
             )
 
-            db.child(riskId).setValue(riskInfo)
+            FirebaseDatabase.getInstance().getReference("risk").child(riskId).setValue(data)
                 .addOnSuccessListener {
-                    Snackbar.make(view, "Risco salvo com ID $riskId!", Snackbar.LENGTH_SHORT)
-                        .setBackgroundTint(Color.GREEN)
-                        .show()
+                    binding.riskTypeEditText.text?.clear()
+                    binding.riskDescEditText.text?.clear()
+                    binding.riskLocEditText.text = null
+                    binding.riskAnexEditIcon.setImageResource(R.drawable.ic_camera)
+                    imageBase64Firebase = null
+
+                    showSnackbar(view, "Risco salvo com ID $riskId!", true)
                 }
-                .addOnFailureListener { e ->
-                    Snackbar.make(view, "Falha ao salvar: ${e.message}", Snackbar.LENGTH_LONG)
-                        .setBackgroundTint(Color.RED)
-                        .show()
+                .addOnFailureListener {
+                    showSnackbar(view, "Erro ao salvar: ${it.message}", false)
                 }
         }
     }
 
-    // Função para gerar um String numérico de exatamente 5 dígitos
-    private fun generateFiveDigitId(): String {
-        val number = Random.nextInt(10000, 100000) // [10000, 99999]
-        return number.toString()
-
-    }
-    private fun getLocation() {
-        Log.d("DEBUG_CHECK", "Permissão OK? ${checkedPermission()}")
-        if (checkedPermission()) {
-
-            if (isLocationEnable()) {
-                Log.d("DEBUG_CHECK", "GPS ativo? ${isLocationEnable()}")
-
-                fusedLocationProviderClient.lastLocation
-                    .addOnSuccessListener { location: Location? ->
-                        Log.d("DEBUG_CHECK", "fusedLocationProviderClient está null? ${::fusedLocationProviderClient.isInitialized.not()}")
-
-                        if (location == null) {
-                            Toast.makeText(this, "Localização não encontrada", Toast.LENGTH_SHORT).show()
-                        } else {
-                            val locTextView = binding.riskLocEditText
-
-                            userLatitude = location.latitude
-                            userLongitude = location.longitude
-
-                            locTextView.text = "Lat: $userLatitude, Long: $userLongitude"
-                        }
-                    }
-                    .addOnFailureListener {
-                         exception ->
-                            Log.e("DEBUG_LOCATION", "Erro ao obter localização: ${exception.message}")
-                        Toast.makeText(this, "Erro ao obter localização", Toast.LENGTH_SHORT).show()
-                    }
-            } else {
-                Toast.makeText(this, "Ative a Localização", Toast.LENGTH_SHORT).show()
-                startActivity(Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS))
-            }
-        } else {
-            requestPermission()
-        }
+    private fun hideKeyboard() {
+        val imm = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(binding.root.windowToken, 0)
     }
 
-
-    private fun isLocationEnable():Boolean{
-        val locationManager:LocationManager=getSystemService(Context.LOCATION_SERVICE) as LocationManager
-        return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)||locationManager.isProviderEnabled(
-            LocationManager.NETWORK_PROVIDER
-        )
-    }
-
-    private fun requestPermission() {
-        ActivityCompat.requestPermissions(
-            this,
-            arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION),
-            PERMISSION_REQUEST_ACESS_LOCATION
-        )
-
-    }
-    private fun checkedPermission():Boolean {
-        if (ActivityCompat.checkSelfPermission(
+    private fun requestLocation(fused: com.google.android.gms.location.FusedLocationProviderClient) {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+            != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(
                 this,
-                android.Manifest.permission.ACCESS_FINE_LOCATION
+                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+                PERM_LOCATION
             )
-            == PackageManager.PERMISSION_GRANTED
-        ) {
-            return true
+            return
         }
-        else
-        {return false}
 
+        val locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+            startActivity(Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS))
+            return
+        }
+
+        fused.lastLocation.addOnSuccessListener { loc: Location? ->
+            loc?.let {
+                userLatitude = it.latitude
+                userLongitude = it.longitude
+                binding.riskLocEditText.text = "Lat: ${it.latitude}, Long: ${it.longitude}"
+            } ?: showSnackbar(binding.root, "Não foi possível obter a localização", false)
+        }
+    }
+
+    private fun checkCameraPermission() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
+            != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(Manifest.permission.CAMERA),
+                PERM_CAMERA
+            )
+        } else {
+            cameraLauncher.launch(null)
+        }
     }
 
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<out String>,
-        grantResults: IntArray,
+        results: IntArray
     ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-
-        Log.d("PERMISSAO", "requestCode: $requestCode")
-        Log.d("PERMISSAO", "permissions: ${permissions.joinToString()}")
-        Log.d("PERMISSAO", "grantResults: ${grantResults.joinToString()}")
-
-        if (requestCode == PERMISSION_REQUEST_ACESS_LOCATION) {
-            // Verifica se a permissão foi realmente concedida
-            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                Toast.makeText(applicationContext, "Permissão concedida", Toast.LENGTH_SHORT).show()
-                getLocation()
-            } else {
-                // Permissão foi negada — perguntar se o usuário quer abrir as configurações
-                AlertDialog.Builder(this)
-                    .setTitle("Permissão negada")
-                    .setMessage("A permissão de localização é necessária para continuar. Deseja abrir as configurações do app para concedê-la manualmente?")
-                    .setPositiveButton("Abrir configurações") { _, _ ->
-                        val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
-                        val uri = android.net.Uri.fromParts("package", packageName, null)
-                        intent.data = uri
-                        startActivity(intent)
-                    }
-                    .setNegativeButton("Cancelar", null)
-                    .show()
-            }
+        super.onRequestPermissionsResult(requestCode, permissions, results)
+        if (requestCode == PERM_CAMERA && results.firstOrNull() == PackageManager.PERMISSION_GRANTED) {
+            cameraLauncher.launch(null)
+        } else if (requestCode == PERM_LOCATION && results.firstOrNull() == PackageManager.PERMISSION_GRANTED) {
+            requestLocation(LocationServices.getFusedLocationProviderClient(this))
         }
     }
 
-    companion object{
-        private const val PERMISSION_REQUEST_ACESS_LOCATION=100
+    private val cameraLauncher = registerForActivityResult(
+        ActivityResultContracts.TakePicturePreview()
+    ) { bmp: Bitmap? ->
+        bmp?.let {
+            binding.riskAnexEditIcon.setImageBitmap(it)
+            imageBase64Firebase = bitmapToBase64(it)
+        }
     }
 
+    private fun bitmapToBase64(bitmap: Bitmap): String {
+        val outputStream = ByteArrayOutputStream()
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 90, outputStream)
+        val byteArray = outputStream.toByteArray()
+        return Base64.encodeToString(byteArray, Base64.DEFAULT)
+    }
+
+    private fun showSnackbar(view: android.view.View, message: String, success: Boolean) {
+        Snackbar.make(view, message, Snackbar.LENGTH_SHORT)
+            .setBackgroundTint(if (success) Color.GREEN else Color.RED)
+            .show()
+    }
 }

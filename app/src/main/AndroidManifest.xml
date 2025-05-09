@@ -2,9 +2,13 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <!-- Permissões necessárias -->
+    <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <!-- <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" /> --> <!-- Só se for usar localização em segundo plano -->
+
+    <!-- Declaração de uso da câmera (não obrigatória, mas recomendada) -->
+    <uses-feature android:name="android.hardware.camera" android:required="false" />
 
     <application
         android:allowBackup="true"
@@ -17,14 +21,24 @@
         android:theme="@style/Theme.PI_03_Equipe_01"
         tools:targetApi="31">
 
+        <!-- FileProvider (opcional, para salvar imagens com URI segura futuramente) -->
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.provider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
+
+        <!-- Suas activities -->
         <activity android:name=".History" android:exported="false" />
-        <activity android:name=".Risk" android:exported="false" />
         <activity android:name=".SignUp" android:exported="false" />
-        <activity android:name=".Information" android:exported="false" />
         <activity android:name=".MainActivity" android:exported="false" />
-        <activity
-            android:name=".Login"
-            android:exported="true">
+        <activity android:name=".Information" android:exported="false" />
+        <activity android:name=".Risk" android:exported="false" />
+        <activity android:name=".Login" android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
