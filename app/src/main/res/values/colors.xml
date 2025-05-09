@@ -7,4 +7,5 @@
     <color name="statusOrange">#FFA726</color>
     <color name="statusGray">#9E9E9E</color>
     <color name="gray">#EFEFEF</color>
+    <color name="red">#F44336</color>
 </resources>

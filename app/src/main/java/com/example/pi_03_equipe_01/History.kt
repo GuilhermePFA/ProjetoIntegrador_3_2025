@@ -39,7 +39,6 @@ class History : AppCompatActivity() {
         // Itens do menu lateral
         navigationView.setNavigationItemSelectedListener { menuItem ->
             when (menuItem.itemId) {
-                R.id.nav_home    -> startActivity(Intent(this, MainActivity::class.java))
                 R.id.nav_history -> {
                     startActivity(Intent(this, History::class.java))
                     finish()
