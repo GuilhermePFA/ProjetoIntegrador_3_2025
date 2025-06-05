@@ -44,7 +44,6 @@ class Risk : AppCompatActivity() {
         binding = ActivityRiskBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // Menu lateral
         binding.menuButton.setOnClickListener {
             hideKeyboard()
             binding.main.openDrawer(GravityCompat.START)

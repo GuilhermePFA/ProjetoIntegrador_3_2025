@@ -2,12 +2,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <!-- Permissões necessárias -->
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
-    <!-- Declaração de uso da câmera (não obrigatória, mas recomendada) -->
     <uses-feature android:name="android.hardware.camera" android:required="false" />
 
     <application
@@ -21,7 +19,6 @@
         android:theme="@style/Theme.PI_03_Equipe_01"
         tools:targetApi="31">
 
-        <!-- FileProvider (opcional, para salvar imagens com URI segura futuramente) -->
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.provider"
@@ -32,7 +29,6 @@
                 android:resource="@xml/file_paths" />
         </provider>
 
-        <!-- Suas activities -->
         <activity android:name=".History" android:exported="false" />
         <activity android:name=".SignUp" android:exported="false" />
         <activity android:name=".MainActivity" android:exported="false" />

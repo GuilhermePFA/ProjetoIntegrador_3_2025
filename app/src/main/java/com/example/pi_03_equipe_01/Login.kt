@@ -7,10 +7,15 @@ import android.text.InputType
 import android.util.Log
 import android.view.MotionEvent
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import com.example.pi_03_equipe_01.databinding.ActivityLoginBinding
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.FirebaseNetworkException
 import com.google.firebase.auth.*
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 
 class Login : AppCompatActivity() {
 
@@ -65,11 +70,12 @@ class Login : AppCompatActivity() {
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
                     val userId = auth.currentUser?.uid
-                    Log.d("LOGIN", "Usuário logado com sucesso: $userId")
-                    val intent = Intent(this, Risk::class.java)
-                    intent.putExtra("USER_ID", userId)
-                    startActivity(intent)
-                    finish()
+                    val idUser = userId?.toString() ?: ""
+                        Log.d("LOGIN", "Usuário logado com sucesso: $userId")
+                        val intent = Intent(this, Risk::class.java)
+                        intent.putExtra("USER_ID", userId)
+                        startActivity(intent)
+                        finish()
                 } else {
                     val exception = task.exception
                     val message = when (exception) {
@@ -80,7 +86,6 @@ class Login : AppCompatActivity() {
                         is FirebaseNetworkException ->
                             "Sem conexão com a internet."
                         else ->
-                            // Caso queira tratar TOO_MANY_ATTEMPTS:
                             if (exception?.message?.contains("TOO_MANY_ATTEMPTS_TRY_LATER") == true)
                                 "Muitas tentativas. Tente novamente mais tarde."
                             else
@@ -90,6 +95,39 @@ class Login : AppCompatActivity() {
                     Log.e("LOGIN", message, exception)
                 }
             }
+    }
+
+
+
+    private fun authUserByRole(userID:String,roleMock:String):Boolean{
+        val ref = FirebaseDatabase.getInstance().getReference("user").child(userID)
+        var autenticado = false
+
+        ref.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                if (snapshot.exists()) {
+                    val role = snapshot.child("role").getValue(String::class.java) ?: ""
+                    if(role == roleMock){
+                         autenticado = true
+                    }
+                    else
+                    {
+                        autenticado = false
+                    }
+
+
+
+                } else {
+                    Log.d("CONSULTA", "Nenhum item encontrado com ID: $userID")
+                }
+            }
+            override fun onCancelled(error: DatabaseError) {
+                Log.e("CONSULTA", "Erro na consulta: ${error.message}")
+            }
+        })
+
+        return autenticado
+
     }
 
     private fun togglePasswordVisibility(visible: Boolean) {

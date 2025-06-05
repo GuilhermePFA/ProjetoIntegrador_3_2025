@@ -29,7 +29,6 @@ class History : AppCompatActivity() {
         binding = ActivityHistoryBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // Inicialize o DrawerLayout e NavigationView
         drawerLayout = findViewById(R.id.hist)
 
         val navigationView: NavigationView = findViewById(R.id.nav_view)
